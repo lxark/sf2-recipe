@@ -1,0 +1,39 @@
+[user]
+        name = <%= node['my_sf2']['git']['user_name'] %>
+        email = <%= node['my_sf2']['mongodb']['user_email'] %>
+[color]
+        diff = auto
+        status = auto
+        branch = auto
+        interactive = auto
+        ui = true
+        pager = true
+ 
+[color "branch"]
+        current = yellow reverse
+        local = yellow
+        remote = green
+ 
+[color "diff"]
+        meta = yellow bold
+        frag = magenta bold
+        old = red bold
+        new = green bold
+ 
+[color "status"]
+        added = green
+        changed = yellow
+        untracked = red
+ 
+[core]
+        excludesfile = $HOME/.gitignore
+        pager = less -FRSX
+        whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	    editor = vim
+[alias]
+    	  st = status
+    	  lg = log -M --decorate --graph
+    	  ci = commit
+    	  pur = pull --rebase
+    	  br = branch
+    	  co = checkout

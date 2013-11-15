@@ -1,0 +1,97 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "raring64"
+  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
+  #config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-i386-vagrant-disk1.box"
+
+  config.vm.network :forwarded_port, guest: 80, host: 4242     # Apache
+  config.vm.network :forwarded_port, guest: 8080, host: 4249   # Tomcat
+
+  # Careful not to create IP conflict in the network
+  config.vm.network :private_network, ip: "192.168.33.10"
+
+  # If application need public access
+  #config.vm.network :public_network, ip: "192.168.0.199"
+
+  config.vm.synced_folder ".", "/vagrant", :nfs => true
+
+  config.ssh.forward_agent = true
+
+  # config.vm.provider :virtualbox do |vb|
+  #  #vb.gui = true
+  #  # Workaround VM booting because of ssh login https://github.com/mitchellh/vagrant/issues/391
+  #  vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
+  #  vb.customize ["modifyvm", :id, "--memory", "2048"]
+  # end
+
+   config.vm.provision :chef_solo do |chef|
+  #   chef.log_level = :debug
+  #   chef.roles_path = "../my-recipes/roles"
+  #   chef.add_role "web"
+     chef.cookbooks_path = "app/config/chef/cookbooks"
+     chef.data_bags_path = "app/config/chef/data_bags"
+     chef.add_recipe "build-essential"
+     chef.add_recipe "apt"
+     chef.add_recipe "xml"
+     chef.add_recipe "git"
+     chef.add_recipe "vim"
+     chef.add_recipe "ark"
+     chef.add_recipe "mongodb::10gen_repo"
+     chef.add_recipe "mongodb"
+     chef.add_recipe "mysql"
+     chef.add_recipe "java"
+     chef.add_recipe "tomcat"
+     chef.add_recipe "tomcat::users"
+     chef.add_recipe "php"
+     chef.add_recipe "php::module_ldap"
+     chef.add_recipe "php::module_curl"
+     chef.add_recipe "php::module_mysql"
+     chef.add_recipe "apache2::mod_php5"
+     chef.add_recipe "apache2::mod_rewrite"
+     chef.add_recipe "my_sf2::utils"
+     chef.add_recipe "my_sf2::git"
+     chef.add_recipe "my_sf2::php"
+     chef.add_recipe "my_sf2::mongodb"
+     chef.add_recipe "my_sf2::apache2"
+     chef.add_recipe "my_sf2::solr"
+     chef.add_recipe "my_sf2::symfony2"
+     chef.add_recipe "phpmyadmin"
+
+     chef.json = {
+     	:apache => {
+     		:user => "vagrant",
+     		:group => "vagrant"
+     	},
+		:tomcat => {
+			:base_version => "7"
+		},
+        :my_sf2 => {
+            :apache2 => {
+                :server_name => "local.my_sf2.com",
+                :server_aliases => %w{local.rc.com my_sf2dev.rc.com}
+            },
+            :mongodb => {
+                :user => "my_sf2",
+                :pass => "my_sf2",
+                :rockmongo_server_name => "local.rockmongo.my_sf2.com",
+                :rockmongo_server_aliases => %w{local.rm.rc.com my_sf2dev.rm.rc.com }
+            },
+            :git => {
+                :user_name => "my_sf2 developer",
+                :user_email => "johndoe@my_sf2.fr",
+            }
+        },
+        :mysql => {
+            :server_debian_password => ''
+            :server_root_password => ''
+            :server_repl_password => ''
+        }
+     }
+   end
+end

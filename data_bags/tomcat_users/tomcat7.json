@@ -1,0 +1,13 @@
+{
+    "id": "tomcat7",
+    "password": "tomcat7",
+    "roles": [
+        "manager",
+        "manager",
+        "manager-gui",
+        "manager-script",
+        "manager-jmx",
+        "manager-status",
+        "admin-gui"
+    ]
+}
