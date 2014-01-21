@@ -1,7 +1,7 @@
 Description
 ===========
 
-Installs the project Rolling Cost (Symfony2).
+Installs the project dev (Symfony2).
 When used with Vagrant, access to the application with your browser
 http://local.my_sf2.com:4242
 
