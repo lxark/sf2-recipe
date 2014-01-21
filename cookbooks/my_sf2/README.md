@@ -19,8 +19,8 @@ Before first "vagrant up", make sure :
 1. you have your ssh-agent running with an available identity
 see https://help.github.com/articles/using-ssh-agent-forwarding
 
-2. you registered your vagrant public key on kara (ask for the password)
-ssh-copy-id vagrant@kara
+2. you registered your vagrant public key on dev (ask for the password)
+ssh-copy-id vagrant@dev
 
 Observations :
 
